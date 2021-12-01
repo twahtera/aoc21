@@ -2,7 +2,7 @@
 let
   inherit (nixpkgs) pkgs;
   ghc = pkgs.haskell.packages.${compiler}.ghcWithPackages (ps: with ps; [
-          monad-par mtl haskell-language-server
+          haskell-language-server
   ]);
 
 in
