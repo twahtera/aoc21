@@ -4,6 +4,11 @@ f :: [Integer] -> [Bool]
 f (a:b:tail) = (a<b) : f (b:tail)
 f _ = []
 
+
+g :: [Integer] -> [Bool]
+g (i:is) = uncurry (<) <$> zip (i:is) is
+g _ = []
+
 getInput :: FilePath -> IO [Integer]
 getInput filename = do
   fileStr <- readFile filename
@@ -17,4 +22,7 @@ main = do
   input <- getInput "./inputs/day1"
 
   putStrLn $ show $ length $ filter id $ f input
+  putStrLn $ show $ length $ filter id $ g input
+
   putStrLn $ show $ length $ filter id $ f $ window3 input
+  putStrLn $ show $ length $ filter id $ g $ window3 input
