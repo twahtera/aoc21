@@ -1,5 +1,3 @@
-{-# LANGUAGE LambdaCase #-}
-
 module Day2 (main) where
 
 import Data.List.Split (splitOn)
@@ -15,16 +13,16 @@ getInput :: FilePath -> IO [Movement]
 getInput path = do
   fileStr <- readFile path
   -- Just crash on invalid input
-  pure $ fromJust <$> parseMovement <$> lines fileStr
+  pure $ fromJust . parseMovement <$> lines fileStr
 
 parseMovement :: String -> Maybe Movement
 parseMovement str =
   case spl of
-    (dirStr : amount : [])
+    [dirStr, amount]
       | dirStr == "forward" -> Forward <$> readMaybe amount
       | dirStr == "down" -> Down <$> readMaybe amount
       | dirStr == "up" -> Up <$> readMaybe amount
-    otherwise -> Nothing
+    _ -> Nothing
 
   where
     spl = splitOn " " str
@@ -40,7 +38,7 @@ addTriple :: (Integer, Integer, Integer) -> (Integer, Integer, Integer) -> (Inte
 addTriple (a,b,c) (x,y,z) = (a+x, b+y, c+z)
 
 getSums :: [Movement] -> (Integer, Integer, Integer)
-getSums ms = foldr (\move acc -> acc `addTriple` toTuple move) (0,0,0) ms
+getSums = foldr (\move acc -> acc `addTriple` toTuple move) (0,0,0)
 
 -- Stuff for star 2
 -- Horizontal, Depth, Aim
@@ -51,7 +49,7 @@ updateState (h, d, a) m = case m of
   Forward x -> (h+x, d+a*x, a)
 
 doMovements :: [Movement] -> (Integer, Integer, Integer)
-doMovements ms = foldl' (\acc move-> acc `updateState` move) (0,0,0) ms
+doMovements = foldl' updateState (0,0,0)
 
 main :: IO ()
 main = do
@@ -68,5 +66,5 @@ main = do
   -- Star 2 answer
   let
     (h, d, a) = doMovements input
-  putStrLn $ show (h,d,a)
+  print (h,d,a)
   putStrLn $ "star 2 answer: " ++ show (h*d)
