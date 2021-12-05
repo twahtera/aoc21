@@ -22,6 +22,7 @@ executable nixtest
   -- other-extensions:
   build-depends:       base >=4.13 && <4.14,
                        Cabal,
-                       split
+                       split,
+                       multiset
   -- hs-source-dirs:
   default-language:    Haskell2010
