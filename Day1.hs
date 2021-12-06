@@ -21,8 +21,8 @@ window3 _ = []
 main = do
   input <- getInput "./inputs/day1"
 
-  putStrLn $ show $ length $ filter id $ f input
-  putStrLn $ show $ length $ filter id $ g input
+  print (length $ filter id $ f input)
+  print (length $ filter id $ g input)
 
-  putStrLn $ show $ length $ filter id $ f $ window3 input
-  putStrLn $ show $ length $ filter id $ g $ window3 input
+  print (length $ filter id $ f $ window3 input)
+  print (length $ filter id $ g $ window3 input)
