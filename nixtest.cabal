@@ -24,6 +24,8 @@ executable nixtest
                        Cabal,
                        split,
                        multiset,
-                       MissingH
+                       MissingH,
+                       extra,
+                       array
   -- hs-source-dirs:
   default-language:    Haskell2010
