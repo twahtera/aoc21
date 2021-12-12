@@ -2,7 +2,7 @@
 let
   inherit (nixpkgs) pkgs;
   ghc = pkgs.haskell.packages.${compiler}.ghcWithPackages (ps: with ps; [
-          haskell-language-server split map multiset MissingH extra array
+          haskell-language-server split map multiset MissingH extra array containers
   ]);
 
 in

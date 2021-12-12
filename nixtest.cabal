@@ -26,6 +26,7 @@ executable nixtest
                        multiset,
                        MissingH,
                        extra,
-                       array
+                       array,
+                       containers
   -- hs-source-dirs:
   default-language:    Haskell2010
