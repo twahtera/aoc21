@@ -1,11 +1,10 @@
-{-# LANGUAGE MultiWayIf #-}
+
 module Day11 where
 
 import Data.Map.Strict (Map, (!), fromList)
 import qualified Data.Map.Strict as Map
 import Debug.Trace (trace)
 import Data.List.Extra (maximumOn)
-import Data.List (intersperse)
 import Data.List
 
 type Point = (Int, Int)
