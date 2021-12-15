@@ -27,7 +27,7 @@ getMostCommonBit bs =
   then 1
   else 0
   where
-    divmodsum = (uncurry (+)) $ divMod (length bs) 2
+    divmodsum = uncurry (+) $ divMod (length bs) 2
 
 toDec :: [Int] -> Int
 toDec bs = sum $ (\(a,b) -> a*2^b) <$> zip bs [length bs - 1, length bs -2 .. 0]
