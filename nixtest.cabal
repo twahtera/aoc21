@@ -27,6 +27,7 @@ executable nixtest
                        MissingH,
                        extra,
                        array,
-                       containers
+                       containers,
+                       hmatrix
   -- hs-source-dirs:
   default-language:    Haskell2010
