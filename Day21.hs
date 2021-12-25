@@ -1,4 +1,5 @@
 {-# LANGUAGE MultiWayIf #-}
+{-# LANGUAGE BangPatterns #-}
 
 module Day21 where
 import Data.List.Split (splitOn)
@@ -66,7 +67,7 @@ wins :: Map GameParams (Int, Int) -> GameParams -> Maybe (Int, Int)
 wins m p@(p1, p2, p1l, p2l, turn) =
   case win p of
     Just w -> Just w
-    Nothing -> Nothing
+    Nothing -> summedVals . weightedVals <$> nextVals
 
       where
         dice :: [(Int, Int)]
@@ -76,19 +77,37 @@ wins m p@(p1, p2, p1l, p2l, turn) =
           then [((p1 + 1 + (p1l + d) `mod` 10, p2, (p1l + d) `mod` 10, p2l, not turn), w) | (d,w) <- dice]
           else [((p1, p2 + 1 + (p2l + d) `mod` 10, p1l, (p2l + d) `mod` 10, not turn), w) | (d,w) <- dice]
 
-        nextVals = first (m !?) <$> nextParams
+        nextVals = sequence $ swallowMaybe . first (m !?) <$> nextParams
+
         weightedVals nV = (\((p1w, p2w), w) -> (p1w * w, p2w * w)) <$> nV
         summedVals wV = (sum $ fst <$> wV, sum $ snd <$> wV)
 
-buildMap :: Map GameParams (Int, Int)
-buildMap = Map.empty
-  where
-    params = [(p1, p2, p1l, p2l, turn) | p1 <- [29, 28..0], p2 <- [29,28..0], p1l <- [0..9], p2l <- [0..9], turn <- [True, False]]
+swallowMaybe :: (Maybe a, b) -> Maybe (a, b)
+swallowMaybe (Just a, b) = Just (a,b)
+swallowMaybe _ = Nothing
 
--- main :: IO ()
--- main = do
---   inputStr <- readFile "./inputs/day21example"
---   let
---     (p1, p2) = readInput inputStr
---     s0 = (p1, p2, True, 0)
---   print $ s1 s0
+addToMap :: Map GameParams (Int, Int) -> [GameParams] -> [GameParams] -> (Map GameParams (Int, Int), [GameParams])
+addToMap m ps' [] = (m, ps')
+addToMap m ps' (p:ps) = case wins m p of
+                          Just v -> (Map.insert p v m, ps++ps')
+                          Nothing -> addToMap m (p:ps') ps
+
+buildMap :: Map GameParams (Int, Int)
+buildMap = bm Map.empty params
+  where
+    --params = [(p1, p2, p1l, p2l, turn) | p1 <- [29, 28..21], p2 <- [29,28..21], p1l <- [0..9], p2l <- [0..9], turn <- [True, False]]
+    params = [(21,21,1,1,True), (20,20,1,1,True)]
+bm :: Map GameParams (Int, Int) -> [GameParams] -> Map GameParams (Int, Int)
+bm m [] = m
+bm m ps = bm m' left
+  where
+    !(m', left) = addToMap m [] ps
+
+main :: IO ()
+main = do
+  inputStr <- readFile "./inputs/day21example"
+  let
+    -- (p1, p2) = readInput inputStr
+    -- s0 = (p1, p2, True, 0)
+
+  print $ length buildMap
