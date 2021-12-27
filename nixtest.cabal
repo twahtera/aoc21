@@ -28,6 +28,7 @@ executable nixtest
                        extra,
                        array,
                        containers,
-                       hmatrix
+                       hmatrix,
+                       mtl
   -- hs-source-dirs:
   default-language:    Haskell2010
